@@ -112,7 +112,7 @@ def fetch_with_backoff(url, max_retries=5, base_delay=1, max_delay=60):
                 fifa.to_csv(csv_route, index=False, encoding="utf-8-sig")
                 print("FIFA data saved to 'data_fifa_ranking.csv'")
 
-                return fifa
+                return None
 
             elif url == "https://raw.githubusercontent.com/datasets/gdp/master/data/gdp.csv":
                 # 1. Cargar dataset mundial de PIB
@@ -135,7 +135,7 @@ def fetch_with_backoff(url, max_retries=5, base_delay=1, max_delay=60):
                 pib.to_csv(csv_route, index=False, encoding="utf-8-sig")
                 print("PIB data saved to 'data_pib_mundial.csv'")
 
-                return pib
+                return None
 
             else:
                 print("URL not recognized for data processing.")
