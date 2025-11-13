@@ -232,4 +232,29 @@ def data_wrangling():
     # Removing rows with missing iso3 codes
     fifa_pib = fifa_pib[fifa_pib['iso3'].notna()]
 
+    # Handling missing values in 'Value_EUR_billions' by confederation mean
+    UEFA_value_mean = fifa_pib[fifa_pib['Confederation'] == 'UEFA']['Value_EUR_billions'].mean()
+    CONMEBOL_value_mean = fifa_pib[fifa_pib['Confederation'] == 'CONMEBOL']['Value_EUR_billions'].mean()
+    CONCACAF_value_mean = fifa_pib[fifa_pib['Confederation'] == 'CONCACAF']['Value_EUR_billions'].mean()
+    CAF_value_mean = fifa_pib[fifa_pib['Confederation'] == 'CAF']['Value_EUR_billions'].mean()
+    AFC_value_mean = fifa_pib[fifa_pib['Confederation'] == 'AFC']['Value_EUR_billions'].mean()
+    OFC_value_mean = fifa_pib[fifa_pib['Confederation'] == 'OFC']['Value_EUR_billions'].mean()
+
+    fifa_pib['Value_EUR_billions'] = fifa_pib['Value_EUR_billions'].fillna(
+        fifa_pib['Confederation'].map({
+            'UEFA': UEFA_value_mean,
+            'CONMEBOL': CONMEBOL_value_mean,
+            'CONCACAF': CONCACAF_value_mean,
+            'CAF': CAF_value_mean,
+            'AFC': AFC_value_mean,
+            'OFC': OFC_value_mean
+        })
+    )
+
+    # Converting Points to numeric, replacing '-' with 0
+    fifa_pib['Points'] = fifa_pib['Points'].str.replace('-', '0').astype('Int64')
+
+    # Renaming final PBI column
+    fifa_pib = fifa_pib.rename(columns={'Value_EUR_billions':'PBI_EUR_billions_FIFA'})
+
     return fifa_pib
